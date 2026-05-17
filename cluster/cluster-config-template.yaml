@@ -8,11 +8,17 @@ HeadNode:
     SubnetId: subnet-08e52a4a07c191043
   Ssh:
     KeyName: parallelcluster-ssh-key
+  CustomActions:
+    OnNodeConfigured:
+      Script: s3://openfoam-cluster-bootstrap-ACCOUNT_ID_PLACEHOLDER/install-singularity.sh
 
 Scheduling:
   Scheduler: slurm
   SlurmQueues:
     - Name: compute
+      CustomActions:
+        OnNodeConfigured:
+          Script: s3://openfoam-cluster-bootstrap-ACCOUNT_ID_PLACEHOLDER/install-singularity.sh
       ComputeResources:
         - Name: cfd-nodes
           Instances:
