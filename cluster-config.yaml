@@ -15,14 +15,15 @@ Scheduling:
     - Name: compute
       ComputeResources:
         - Name: cfd-nodes
-          InstanceType: c5n.4xlarge
+          Instances:
+            - InstanceType: c5n.4xlarge
           MinCount: 0
           MaxCount: 8
       Networking:
         SubnetIds:
           - subnet-08e52a4a07c191043
-        PlacementGroup:
-          Enabled: true
+          - subnet-0ffc53a53aefc485c
+          - subnet-0ca2ccbb238c41833
 
 SharedStorage:
   - MountDir: /shared
