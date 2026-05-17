@@ -1,19 +1,26 @@
 #!/bin/bash
+# setup-aws.sh
+# Prerequisites for deploying an AWS ParallelCluster from WSL (Ubuntu).
+# Run this script section by section.
+
+
 
 # Install AWS CLI
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 # Might need to fix network settings for WSL:
-ping 8.8.8.8
-curl -I https://google.com
-sudo rm /etc/resolv.conf
-echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
-sudo chattr +i /etc/resolv.conf
+# ping 8.8.8.8
+# curl -I https://google.com
+# sudo rm /etc/resolv.conf
+# echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+# sudo chattr +i /etc/resolv.conf
+# curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
 # Continue installing AWS CLI
 unzip awscliv2.zip
 sudo ./aws/install
 aws --version
 
-# Install Python 3
+# Install Python 3.10 for pcluster compatibility (Amazon Liunux 2 ships with 3.7)
 sudo apt update && sudo apt install -y software-properties-common
 sudo add-apt-repository ppa:deadsnakes/ppa -y
 sudo apt update
@@ -40,7 +47,7 @@ sudo apt-get install -y nodejs
 
 # Go to IAM → Users → Create user
 # Name it parallelcluster-admin
-# Attach policy: AdministratorAccess (sufficient for a personal account; scope down in production)
+# Attach policy: AdministratorAccess
 # Go to Security credentials → Create access key (choose "CLI" use case)
 # Download the .csv — you need the Access Key ID and Secret Access Key
 
