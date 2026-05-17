@@ -17,4 +17,4 @@ on a SLURM-managed HPC cluster, with parallel ParaView post-processing.
 - `teardown/` — clean cluster deletion
 
 ## Usage
-See each directory for scripts and
+See each directory for scripts and explanations on how to implement each step correctly and issues you might face (which I did)!
