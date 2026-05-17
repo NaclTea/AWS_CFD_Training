@@ -5,9 +5,13 @@ Image:
 HeadNode:
   InstanceType: t3.medium
   Networking:
-    SubnetId: subnet-08e52a4a07c191043
+    SubnetId: HEAD_NODE_SUBNET_PLACEHOLDER
   Ssh:
     KeyName: parallelcluster-ssh-key
+  Iam:
+    S3Access:
+      - BucketName: openfoam-cluster-bootstrap-ACCOUNT_ID_PLACEHOLDER
+        EnableWriteAccess: false
   CustomActions:
     OnNodeConfigured:
       Script: s3://openfoam-cluster-bootstrap-ACCOUNT_ID_PLACEHOLDER/install-singularity.sh
@@ -16,6 +20,10 @@ Scheduling:
   Scheduler: slurm
   SlurmQueues:
     - Name: compute
+      Iam:
+        S3Access:
+          - BucketName: openfoam-cluster-bootstrap-ACCOUNT_ID_PLACEHOLDER
+            EnableWriteAccess: false
       CustomActions:
         OnNodeConfigured:
           Script: s3://openfoam-cluster-bootstrap-ACCOUNT_ID_PLACEHOLDER/install-singularity.sh
