@@ -1,0 +1,32 @@
+Region: eu-west-2
+Image:
+  Os: alinux2
+
+HeadNode:
+  InstanceType: t3.medium
+  Networking:
+    SubnetId: subnet-08e52a4a07c191043
+  Ssh:
+    KeyName: parallelcluster-ssh-key
+
+Scheduling:
+  Scheduler: slurm
+  SlurmQueues:
+    - Name: compute
+      ComputeResources:
+        - Name: cfd-nodes
+          InstanceType: c5n.4xlarge
+          MinCount: 0
+          MaxCount: 8
+      Networking:
+        SubnetIds:
+          - subnet-08e52a4a07c191043
+        PlacementGroup:
+          Enabled: true
+
+SharedStorage:
+  - MountDir: /shared
+    Name: shared-storage
+    StorageType: Efs
+    EfsSettings:
+      DeletionPolicy: Delete

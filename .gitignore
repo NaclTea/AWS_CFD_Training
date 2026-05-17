@@ -1,2 +1,5 @@
 .ssh/
 *.pem
+.venv/
+__pycache__/
+aws/
