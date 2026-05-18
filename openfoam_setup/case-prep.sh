@@ -34,7 +34,7 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-motorBike.obj
+motorBike.obj.gz
 {
     extractionMethod    extractFromSurface;
 

@@ -7,6 +7,8 @@
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=juanphilipmarx+AWS_CFD@gmail.com
 
+set -e  # stop immediately on any error
+
 OF_SOURCE="source /usr/lib/openfoam/openfoam2312/etc/bashrc"
 
 # Serial pre-processing inside container
