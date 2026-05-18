@@ -17,6 +17,38 @@ wget https://raw.githubusercontent.com/OpenFOAM/OpenFOAM-10/master/tutorials/res
 # Clean up no longer needed files
 rm -rf /shared/cases/OpenFOAM-10
 
+# Create our surfaceFeatureExtractDict
+cat > /shared/cases/motorBikeTutorial/system/surfaceFeatureExtractDict << 'EOF'
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           |
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      surfaceFeatureExtractDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+motorBike.obj
+{
+    extractionMethod    extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        includedAngle   150;
+    }
+
+    writeObj            yes;
+}
+
+// ************************************************************************* //
+EOF
+
 # Edit decomposeParDict for our cluster
 cat > /shared/cases/motorBikeTutorial/system/decomposeParDict << 'EOF'
 /*--------------------------------*- C++ -*----------------------------------*\
