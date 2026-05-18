@@ -10,7 +10,10 @@ else
     echo "Container already exists, skipping pull"
 fi
 singularity exec /shared/containers/openfoam-run_2312.sif openfoam2312 -help
-
+# Verify container is valid
+singularity exec /shared/containers/openfoam-run_2312.sif echo "Container OK" || \
+    singularity pull docker://opencfd/openfoam-run:2312
+    
 # CLONE OPENFOAM SCRIPTS FROM GITHUB
 mkdir -p /shared/scripts
 cd /shared/scripts
