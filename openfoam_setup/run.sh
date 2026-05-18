@@ -7,5 +7,7 @@
 
 singularity exec \
     --bind /shared:/shared \
+    --bind /opt/slurm:/opt/slurm \
+    --bind /opt/pmix:/opt/pmix \
     /shared/containers/openfoam-run_2312.sif \
     bash /shared/scripts/AWS_CFD_Training/openfoam_setup/run-openfoam.sh
