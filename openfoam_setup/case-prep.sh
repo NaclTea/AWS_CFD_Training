@@ -13,40 +13,36 @@ cp -r tutorials/incompressible/simpleFoam/motorBike/ /shared/cases/motorBikeTuto
 # Download geometry
 wget https://raw.githubusercontent.com/OpenFOAM/OpenFOAM-10/master/tutorials/resources/geometry/motorBike.obj.gz \
     -P /shared/cases/motorBikeTutorial/constant/geometry/
+mkdir /shared/cases/motorBikeTutorial/constant/triSurface
+cp /shared/cases/motorBikeTutorial/constant/motorBike.obj.gz /shared/cases/motorBikeTutorial/constant/triSurface/motorBike.obj.gz
+gzip -d /shared/cases/motorBikeTutorial/constant/triSurface/motorBike.obj.gz
+
 
 # Clean up no longer needed files
 rm -rf /shared/cases/OpenFOAM-10
 
 # Create our surfaceFeatureExtractDict
 cat > /shared/cases/motorBikeTutorial/system/surfaceFeatureExtractDict << 'EOF'
-/*--------------------------------*- C++ -*----------------------------------*\
-  =========                 |
-  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           |
-     \\/     M anipulation  |
-\*---------------------------------------------------------------------------*/
 FoamFile
 {
+    version     2.0;
     format      ascii;
     class       dictionary;
     object      surfaceFeatureExtractDict;
 }
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-motorBike.obj.gz
+motorBike.obj
 {
     extractionMethod    extractFromSurface;
 
-    extractFromSurfaceCoeffs
-    {
-        includedAngle   150;
-    }
+    includedAngle       150;
+
+    geometricTestOnly   yes;
+
+    intersectionMethod  none;
 
     writeObj            yes;
 }
-
-// ************************************************************************* //
 EOF
 
 # Edit decomposeParDict for our cluster
