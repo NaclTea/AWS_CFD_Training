@@ -8,7 +8,7 @@ git clone --depth 1 --filter=blob:none --sparse https://github.com/OpenFOAM/Open
 cd OpenFOAM-10
 git sparse-checkout set tutorials/incompressible/simpleFoam/motorBike
 git checkout
-cp -r tutorials/incompressible/simpleFoam/motorBike /shared/cases/motorBikeTutorial
+cp -r tutorials/incompressible/simpleFoam/motorBike/ /shared/cases/motorBikeTutorial/
 
 # Download geometry
 wget https://raw.githubusercontent.com/OpenFOAM/OpenFOAM-10/master/tutorials/resources/geometry/motorBike.obj.gz \
