@@ -8,4 +8,4 @@
 #SBATCH --output=/shared/cases/motorBikeTutorial/slurm-%j.log
 
 cd /shared/cases/motorBikeTutorial
-singularity exec --mpi=pmi2 /shared/containers/openfoam-run_2312.sif bash -c "./Allrun"
+singularity exec /shared/containers/openfoam-run_2312.sif bash -c "./Allrun"
