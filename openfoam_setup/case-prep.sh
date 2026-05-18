@@ -50,7 +50,7 @@ cd ${0%/*} || exit 1    # Run from this directory
 . $WM_PROJECT_DIR/bin/tools/RunFunctions
 
 # Geometry already present in constant/geometry/
-runApplication surfaceFeatures
+runApplication surfaceFeatureExtract
 runApplication blockMesh
 runApplication decomposePar -copyZero
 runParallel snappyHexMesh -overwrite

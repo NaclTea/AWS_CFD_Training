@@ -4,44 +4,46 @@
 #SBATCH --ntasks-per-node=16
 #SBATCH --partition=compute
 #SBATCH --output=/shared/cases/motorBikeTutorial/slurm-%j.log
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=juanphilipmarx+AWS_CFD@gmail.com
 
-# Get hostlist from SLURM
-HOSTS=$(scontrol show hostnames $SLURM_JOB_NODELIST | tr '\n' ',' | sed 's/,$//')
-
-# Set OpenFOAM source command
 OF_SOURCE="source /usr/lib/openfoam/openfoam2312/etc/bashrc"
 
-# Serial pre-processing
+# Serial pre-processing inside container
 singularity exec --bind /shared:/shared \
     /shared/containers/openfoam-run_2312.sif \
-    bash --login -c "$OF_SOURCE && \
-                     cd /shared/cases/motorBikeTutorial && \
-                     surfaceFeatures && \
-                     blockMesh && \
-                     decomposePar -copyZero"
+    bash -c "$OF_SOURCE && \
+             cd /shared/cases/motorBikeTutorial && \
+             surfaceFeatureExtract && \
+             blockMesh && \
+             decomposePar -copyZero"
 
-# Parallel steps - force SSH transport, bypass SLURM launcher
-singularity exec --bind /shared:/shared \
+# Parallel steps - use HOST mpirun, each rank runs inside container
+mpirun -np 128 \
+    singularity exec --bind /shared:/shared \
     /shared/containers/openfoam-run_2312.sif \
-    bash --login -c "$OF_SOURCE && \
-                     cd /shared/cases/motorBikeTutorial && \
-                     mpirun --mca plm_rsh_agent ssh \
-                            --mca btl_tcp_if_include eth0 \
-                            -np 128 -H ${HOSTS} \
-                            snappyHexMesh -overwrite -parallel && \
-                     mpirun --mca plm_rsh_agent ssh \
-                            --mca btl_tcp_if_include eth0 \
-                            -np 128 -H ${HOSTS} \
-                            potentialFoam -parallel && \
-                     mpirun --mca plm_rsh_agent ssh \
-                            --mca btl_tcp_if_include eth0 \
-                            -np 128 -H ${HOSTS} \
-                            simpleFoam -parallel"
+    bash -c "$OF_SOURCE && \
+             cd /shared/cases/motorBikeTutorial && \
+             snappyHexMesh -overwrite -parallel"
 
-# Reconstruct
+mpirun -np 128 \
+    singularity exec --bind /shared:/shared \
+    /shared/containers/openfoam-run_2312.sif \
+    bash -c "$OF_SOURCE && \
+             cd /shared/cases/motorBikeTutorial && \
+             potentialFoam -parallel"
+
+mpirun -np 128 \
+    singularity exec --bind /shared:/shared \
+    /shared/containers/openfoam-run_2312.sif \
+    bash -c "$OF_SOURCE && \
+             cd /shared/cases/motorBikeTutorial && \
+             simpleFoam -parallel"
+
+# Serial reconstruction
 singularity exec --bind /shared:/shared \
     /shared/containers/openfoam-run_2312.sif \
-    bash --login -c "$OF_SOURCE && \
-                     cd /shared/cases/motorBikeTutorial && \
-                     reconstructParMesh -constant && \
-                     reconstructPar -latestTime"
+    bash -c "$OF_SOURCE && \
+             cd /shared/cases/motorBikeTutorial && \
+             reconstructParMesh -constant && \
+             reconstructPar -latestTime"
