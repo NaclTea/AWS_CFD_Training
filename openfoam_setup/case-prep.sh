@@ -36,7 +36,7 @@ FoamFile
 
 numberOfSubdomains  128;
 
-decomposer          scotch;
+method          scotch;
 
 // ************************************************************************* //
 EOF
